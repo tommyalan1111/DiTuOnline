@@ -4,21 +4,25 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 export const LOOKS = {
   male: {
     label: 'Nam',
-    robe: '#8a5733',
-    robeDark: '#6d4126',
-    trim: '#e2cda6',
+    robe: '#9e322b',
+    robeDark: '#7a241f',
+    trim: '#d4af37',
     skin: '#d5a57b',
-    sash: '#5a3520',
-    beads: '#4a3020',
+    sash: '#c9a227',
+    beads: '#3f2a1a',
+    sleeve: '#c9a36c',
+    cap: '#d4af37',
   },
   female: {
     label: 'Nữ',
-    robe: '#77878a',
-    robeDark: '#626f72',
-    trim: '#ece7d9',
+    robe: '#8f857a',
+    robeDark: '#776e64',
+    trim: '#d9cebb',
     skin: '#dfb08a',
-    sash: '#586763',
+    sash: '#6b5b4a',
     beads: '#4a3020',
+    sleeve: '#8f857a',
+    cap: '#6d4b38',
   },
 };
 
@@ -180,6 +184,7 @@ export class Avatar {
     ];
     bodyGeos.push(colorize(new THREE.LatheGeometry(robeProfile, 26), look.robe));
 
+
     // đáy áo (tránh nhìn thấy khoang rỗng từ góc thấp)
     const sole = new THREE.CircleGeometry(0.357, 26);
     sole.rotateX(Math.PI / 2);
@@ -187,8 +192,8 @@ export class Avatar {
     bodyGeos.push(colorize(sole, look.robeDark));
 
     // vai (cùng màu áo để không tạo mảng tối)
-    const shoulders = new THREE.SphereGeometry(0.235, 18, 12);
-    shoulders.scale(1.04, 0.56, 0.8);
+    const shoulders = new THREE.SphereGeometry(0.232, 18, 12);
+    shoulders.scale(gender === 'female' ? 0.96 : 1.04, 0.56, 0.8);
     shoulders.translate(0, 1.045, 0);
     bodyGeos.push(colorize(shoulders, look.robe));
 
@@ -263,30 +268,46 @@ export class Avatar {
       const cap = new THREE.SphereGeometry(0.19, 26, 18, Math.PI * 0.78, Math.PI * 1.44, 0, Math.PI * 0.6);
       cap.scale(1, 1.02, 1.03);
       cap.translate(0, 0.295, 0);
-      spineGeos.push(colorize(cap, look.trim));
+      spineGeos.push(colorize(cap, look.cap));
 
       // đỉnh khăn: phủ phần trên trán (vá chỗ hở của chỏm)
       const crown = new THREE.SphereGeometry(0.192, 24, 10, 0, Math.PI * 2, 0, Math.PI * 0.38);
       crown.translate(0, 0.295, 0);
-      spineGeos.push(colorize(crown, look.trim));
+      spineGeos.push(colorize(crown, look.cap));
 
       // vành khăn quanh mặt
       const brim = new THREE.TorusGeometry(0.187, 0.017, 6, 26, Math.PI * 0.92);
       brim.rotateX(Math.PI / 2);
       brim.rotateZ(Math.PI * 0.04);
       brim.translate(0, 0.37, 0.01);
-      spineGeos.push(colorize(brim, look.trim));
+      spineGeos.push(colorize(brim, '#7d5842'));
 
-      // voan phủ vai (chừa mặt phía trước)
-      const veil = new THREE.CylinderGeometry(0.18, 0.29, 0.36, 24, 1, true, Math.PI * 0.32, Math.PI * 1.36);
-      veil.translate(0, 0.015, 0);
-      spineGeos.push(colorize(veil, look.trim));
     } else {
-      // ba chấm giới trên đỉnh đầu
-      for (let i = 0; i < 3; i++) {
-        const dot = new THREE.SphereGeometry(0.013, 6, 5);
-        dot.translate(0, 0.437, 0.046 + i * 0.032);
-        spineGeos.push(colorize(dot, '#b08262'));
+      // mũ Tỳ Lư (5 lá) — nét đặc trưng của tăng sĩ mặc lễ phục
+      const band = new THREE.CylinderGeometry(0.146, 0.152, 0.07, 22);
+      band.translate(0, 0.405, 0);
+      spineGeos.push(colorize(band, look.cap));
+
+      for (let i = 0; i < 5; i++) {
+        const a = -0.75 + (i / 4) * 1.5;
+        const petal = new THREE.BoxGeometry(0.072, 0.17, 0.02);
+        petal.translate(0, 0.085, 0);
+        petal.rotateX(-0.22);
+        petal.rotateY(a);
+        petal.translate(Math.sin(a) * 0.148, 0.43, Math.cos(a) * 0.148);
+        spineGeos.push(colorize(petal, look.cap));
+      }
+
+      const top = new THREE.SphereGeometry(0.028, 8, 6);
+      top.translate(0, 0.625, 0);
+      spineGeos.push(colorize(top, look.cap));
+
+      // hai dải lụa vàng buông trước ngực
+      for (const sx of [-1, 1]) {
+        const ribbon = new THREE.BoxGeometry(0.026, 0.42, 0.008);
+        ribbon.rotateZ(sx * 0.05);
+        ribbon.translate(sx * 0.118, 0.19, 0.215);
+        spineGeos.push(colorize(ribbon, '#e8c25a'));
       }
     }
 
@@ -337,7 +358,7 @@ export class Avatar {
       const sleeve = new THREE.CylinderGeometry(0.076, 0.1, 0.46, 12);
       sleeve.rotateZ(sx * 0.06);
       sleeve.translate(sx * 0.238, -0.23, 0.012);
-      armGeos.push(colorize(sleeve, look.robe));
+      armGeos.push(colorize(sleeve, look.sleeve));
 
       const hand = new THREE.SphereGeometry(0.058, 10, 8);
       hand.scale(0.9, 1.05, 0.9);
