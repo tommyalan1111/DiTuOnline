@@ -135,7 +135,7 @@ export function openGenderScreen({ user, onDone }) {
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     // giữ hai nhân vật vừa khung
-    const spread = w / h < 0.9 ? 4.6 : w / h < 1.5 ? 5.8 : 5.6;
+    const spread = w / h < 0.9 ? 4.3 : w / h < 1.5 ? 5.0 : 4.9;
     camera.position.z = spread;
     camera.updateProjectionMatrix();
   }

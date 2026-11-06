@@ -85,7 +85,7 @@ function enterTemple(temple) {
       game = new Game({
         temple,
         user,
-        spawn: { x: 0, z: 13.5, rot: Math.PI },
+        spawn: { x: (Math.random() - 0.5) * 4, z: 12.5 + Math.random() * 2.5, rot: Math.PI },
         onLeave: () => {
           game = null;
           window.__game = null;
