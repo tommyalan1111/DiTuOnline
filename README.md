@@ -85,7 +85,9 @@ Mở `http://<IP-máy-tính>:3000` từ điện thoại cùng mạng Wi-Fi để
 npm run android:apk
 ```
 
-APK nằm ở `android/app/build/outputs/apk/debug/app-debug.apk`.
+APK được lưu tự động vào thư mục [`build/`](build/) với tên có phiên bản và thời điểm,
+ví dụ `build/DiTuOnline-v1.0.0-20261106-1648-debug.apk` (xem [build/versions.md](build/versions.md)).
+Bản gốc do Gradle tạo nằm ở `android/app/build/outputs/apk/debug/app-debug.apk`.
 
 Có thể build bản release (cần cấu hình khoá ký trong `android/app/build.gradle`):
 
