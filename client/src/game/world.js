@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { themeOf } from './theme.js';
+import { Cat } from './cats.js';
 import {
   createHall,
   createGate,
@@ -682,6 +683,18 @@ export class World {
     this.hallLight = new THREE.PointLight('#ffb066', 0, 14, 2);
     this.hallLight.position.set(0, 3.2, -16);
     this.scene.add(this.hallLight);
+
+    // hai con mèo đi dạo trong sân
+    this.cats = [
+      new Cat({ color: '#d9904f', belly: '#f3e8d2', stripe: '#b06f36', scale: 1.3 }),
+      new Cat({ color: '#9aa0a6', belly: '#e9e6df', stripe: '#7f848a', scale: 1.25 }),
+    ];
+    this.cats[0].setPosition(-4.5, 9);
+    this.cats[1].setPosition(5, 15);
+    for (const cat of this.cats) {
+      cat.setBounds({ minX: -10.5, maxX: 10.5, minZ: 0.5, maxZ: 21 });
+      this.scene.add(cat.group);
+    }
   }
 
   /* ── cây ── */
@@ -841,6 +854,9 @@ export class World {
         g.material.opacity = (this.theme.night ? 0.42 : 0.1) * flick;
       }
     }
+
+    // mèo đi dạo
+    if (this.cats) for (const cat of this.cats) cat.update(dt);
 
     // chuông đung đưa
     if (this.bell?.userData.bell) {
