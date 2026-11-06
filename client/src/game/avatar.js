@@ -71,7 +71,7 @@ function faceTexture() {
 
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
-  t.flipY = false;
+  t.flipY = true; // SphereGeometry có v=1 ở đỉnh → cần lật ảnh
   _faceTex = t;
   return t;
 }
@@ -251,31 +251,31 @@ export class Avatar {
 
     const head = new THREE.SphereGeometry(0.3, 30, 22);
     head.scale(1, 0.98, 0.96);
-    head.translate(0, 0.24, 0);
+    head.translate(0, 0.34, 0);
     headGeos.push(colorize(head, look.skin));
 
     if (gender === 'female') {
       // khăn trùm nâu ôm đầu, chừa mặt
       const cap = new THREE.SphereGeometry(0.313, 28, 20, Math.PI * 0.78, Math.PI * 1.44, 0, Math.PI * 0.7);
       cap.scale(1, 0.99, 0.97);
-      cap.translate(0, 0.24, 0);
+      cap.translate(0, 0.34, 0);
       headGeos.push(colorize(cap, look.cap));
 
       const crown = new THREE.SphereGeometry(0.313, 28, 12, 0, Math.PI * 2, 0, Math.PI * 0.4);
       crown.scale(1, 0.99, 0.97);
-      crown.translate(0, 0.24, 0);
+      crown.translate(0, 0.34, 0);
       headGeos.push(colorize(crown, look.cap));
 
       const brim = new THREE.TorusGeometry(0.305, 0.03, 8, 26, Math.PI * 0.92);
       brim.rotateX(Math.PI / 2);
       brim.rotateZ(Math.PI * 0.04);
-      brim.translate(0, 0.305, 0.012);
+      brim.translate(0, 0.405, 0.012);
       headGeos.push(colorize(brim, '#7d5842'));
     } else {
       // ba chấm giới
       for (let i = 0; i < 3; i++) {
         const dot = new THREE.SphereGeometry(0.016, 6, 5);
-        dot.translate(0, 0.5, 0.055 + i * 0.036);
+        dot.translate(0, 0.6, 0.055 + i * 0.036);
         headGeos.push(colorize(dot, '#b08262'));
       }
     }
@@ -290,7 +290,7 @@ export class Avatar {
     // khuôn mặt: decal cầu, texture trong suốt
     const faceGeo = new THREE.SphereGeometry(0.304, 28, 22, Math.PI / 2 - 0.7, 1.4, Math.PI * 0.36, Math.PI * 0.38);
     faceGeo.scale(1, 0.98, 0.96);
-    faceGeo.translate(0, 0.24, 0);
+    faceGeo.translate(0, 0.34, 0);
     const faceMesh = new THREE.Mesh(
       faceGeo,
       new THREE.MeshBasicMaterial({ map: faceTexture(), transparent: true, depthWrite: false, fog: false }),
