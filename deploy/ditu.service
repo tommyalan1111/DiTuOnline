@@ -1,0 +1,18 @@
+[Unit]
+Description=Di Tu Online (Node.js)
+After=network.target
+
+[Service]
+WorkingDirectory=/home/ubuntu/DiTuOnline
+ExecStart=/usr/bin/node server/index.js
+Restart=always
+RestartSec=3
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=DATA_DIR=/home/ubuntu/DiTuOnline/data
+# Đổi chuỗi dưới đây thành kết quả của: openssl rand -hex 32
+Environment=AUTH_SECRET=THAY_BANG_CHUOI_BI_MAT_CUA_BAN
+User=ubuntu
+
+[Install]
+WantedBy=multi-user.target

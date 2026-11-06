@@ -118,6 +118,8 @@ VITE_DEFAULT_SERVER=http://192.168.1.10:3000 npm run android:apk
 
 Hướng dẫn chi tiết cho Render (miễn phí), Cloudflare Tunnel và VPS Oracle:
 xem [docs/DEPLOY.md](docs/DEPLOY.md).
+Riêng Oracle Always Free (miễn phí vĩnh viễn, có ổ đĩa giữ dữ liệu):
+xem [docs/DEPLOY-ORACLE.md](docs/DEPLOY-ORACLE.md).
 
 Bản deploy sẵn có: [`render.yaml`](render.yaml), [`Dockerfile`](Dockerfile).
 

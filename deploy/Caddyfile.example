@@ -1,0 +1,5 @@
+# Thay bằng tên miền của bạn (DuckDNS, tên riêng, hoặc <IP>.sslip.io)
+ditu-online.duckdns.org {
+    encode gzip
+    reverse_proxy 127.0.0.1:3000
+}

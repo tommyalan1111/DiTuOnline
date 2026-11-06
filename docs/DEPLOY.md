@@ -114,6 +114,9 @@ Gửi địa chỉ này cho bạn bè, hoặc nhập vào app Android ở nút *
 
 ## C. Oracle Cloud Always Free — miễn phí lâu dài, có dữ liệu
 
+> Hướng dẫn chi tiết từng bước: **[DEPLOY-ORACLE.md](DEPLOY-ORACLE.md)**.
+> Dưới đây là bản tóm tắt.
+
 Oracle cho 1 máy ảo ARM (4 CPU, 24GB RAM, 200GB đĩa) **miễn phí vĩnh viễn**, phù hợp chạy game này.
 Cần thẻ để xác minh (không bị trừ tiền nếu chỉ dùng gói Always Free).
 
