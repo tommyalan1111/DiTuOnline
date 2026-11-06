@@ -114,6 +114,23 @@ VITE_DEFAULT_SERVER=http://192.168.1.10:3000 npm run android:apk
 
 ---
 
+## Chơi với bạn bè qua Internet (nhanh nhất)
+
+```bash
+npm run public
+```
+
+Lệnh này chạy server + Cloudflare Quick Tunnel, in ra địa chỉ dạng
+`https://....trycloudflare.com`. Gửi địa chỉ đó cho bạn bè, hoặc nhập vào app Android ở nút **Máy chủ**.
+
+- Máy tính phải đang bật và kết nối Internet.
+- Địa chỉ **đổi mỗi lần chạy**.
+- Cần `bin/cloudflared` — tải một lần theo hướng dẫn trong [docs/DEPLOY.md](docs/DEPLOY.md).
+
+Với địa chỉ cố định, dùng Render hoặc VPS (xem [docs/DEPLOY.md](docs/DEPLOY.md)).
+
+---
+
 ## Triển khai lên Internet
 
 Hướng dẫn chi tiết cho Render (miễn phí), Cloudflare Tunnel và VPS Oracle:

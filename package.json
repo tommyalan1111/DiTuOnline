@@ -16,7 +16,8 @@
     "android:sync": "npm run build && cap sync android",
     "android:open": "cap open android",
     "android:apk": "npm run android:sync && cd android && ./gradlew assembleDebug && cd .. && node scripts/collect-apk.mjs",
-    "android:bundle": "npm run android:sync && cd android && ./gradlew bundleRelease"
+    "android:bundle": "npm run android:sync && cd android && ./gradlew bundleRelease",
+    "public": "bash scripts/go-public.sh"
   },
   "dependencies": {
     "@capacitor/core": "^7.4.3",
