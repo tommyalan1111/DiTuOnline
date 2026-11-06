@@ -25,3 +25,8 @@ export function serverLabel() {
 }
 
 export const APP_VERSION = '1.0.0';
+
+// Thông tin hòm công đức
+// Đổi số này nếu muốn dùng ví khác.
+export const MOMO_NUMBER = '0902821105';
+export const MOMO_NAME = 'Đi Tu Online';

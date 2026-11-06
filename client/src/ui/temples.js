@@ -2,6 +2,7 @@ import { api } from '../api.js';
 import { net } from '../net.js';
 import { $, $$, initialOf, show, escapeHtml } from './dom.js';
 import { toast } from './toast.js';
+import { openDonationBox } from './donation.js';
 
 
 let offCounts = null;
@@ -27,6 +28,7 @@ export async function openTemples({ user, onEnter, onLogout }) {
 
   // xác nhận được xử lý ở main.logout() để tránh hỏi hai lần
   $('#btn-temples-logout').onclick = () => onLogout();
+  $('#btn-temples-donate').onclick = () => openDonationBox({ username: user.username });
 
   const grid = $('#temple-grid');
   grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink-3)">Đang mở danh sách chùa…</div>';

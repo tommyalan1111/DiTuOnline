@@ -131,6 +131,16 @@ Với địa chỉ cố định, dùng Render hoặc VPS (xem [docs/DEPLOY.md](d
 
 ---
 
+## Hòm công đức
+
+- Nút **hòm công đức** ở màn chọn chùa (biểu tượng hộp quà vàng) và trong menu **Tĩnh tâm** khi đang chơi.
+- Số Momo cấu hình tại `client/src/config.js` (`MOMO_NUMBER`).
+- Muốn hiện **mã QR Momo** trong popup: mở app Momo → *Nhận tiền* → lưu mã QR của bạn,
+  đặt tên `momo-qr.png` và để vào `client/public/momo-qr.png`, rồi build lại.
+  Nếu chưa có ảnh, popup vẫn hiện số Momo và nút sao chép.
+
+---
+
 ## Triển khai lên Internet
 
 Hướng dẫn chi tiết cho Render (miễn phí), Cloudflare Tunnel và VPS Oracle:

@@ -7,6 +7,7 @@ import { net } from '../net.js';
 import { store } from '../store.js';
 import { toast } from '../ui/toast.js';
 import { openModal, confirmDialog } from '../ui/modal.js';
+import { openDonationBox } from '../ui/donation.js';
 import { $, $$, formatTime } from '../ui/dom.js';
 
 const ACTION_COOLDOWNS = { bow: 1200, incense: 20000, bell: 15000, meditate: 0, stand: 0 };
@@ -545,7 +546,7 @@ export class Game {
       body.appendChild(row);
     }
 
-    openModal({
+    const modal = openModal({
       title: 'Tĩnh tâm',
       body,
       actions: [
@@ -568,6 +569,16 @@ export class Game {
         { label: 'Ở lại', variant: 'primary' },
       ],
     });
+
+    const donate = document.createElement('button');
+    donate.type = 'button';
+    donate.className = 'btn donate-menu-btn';
+    donate.textContent = 'Hòm công đức';
+    donate.addEventListener('click', () => {
+      modal.close();
+      openDonationBox({ username: this.user.username });
+    });
+    body.appendChild(donate);
   }
 
   async leaveTemple() {
