@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+    <meta name="theme-color" content="#1f4a36" />
+    <meta name="description" content="Đi Tu Online — mười ngôi chùa giữa mây ngàn, một chốn bình yên để lòng lắng lại." />
+    <title>Đi Tu Online</title>
+    <link rel="stylesheet" href="/fonts/fonts.css" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- ───────────────────────── nền thiền môn ───────────────────────── -->
+      <div class="bg-scene" aria-hidden="true">
+        <div class="bg-glow"></div>
+        <div class="bg-moon"></div>
+        <svg class="bg-ridges" viewBox="0 0 1440 700" preserveAspectRatio="xMidYMax slice">
+          <path class="ridge r3" d="M0 470 L120 410 L210 445 L330 350 L420 400 L520 320 L610 385 L720 300 L820 380 L930 330 L1030 400 L1130 345 L1240 410 L1340 365 L1440 420 L1440 700 L0 700 Z" />
+          <path class="ridge r2" d="M0 540 C120 470 180 520 300 470 C410 425 470 505 590 470 C700 438 760 512 880 480 C990 450 1050 520 1170 490 C1280 462 1350 520 1440 495 L1440 700 L0 700 Z" />
+          <path class="ridge r1" d="M0 620 C140 580 230 610 340 585 C460 558 560 610 690 590 C800 573 900 615 1020 600 C1140 585 1250 620 1440 596 L1440 700 L0 700 Z" />
+        </svg>
+        <div class="bg-mist m1"></div>
+        <div class="bg-mist m2"></div>
+        <div class="petal-layer" id="petal-layer"></div>
+        <div class="bg-grain"></div>
+      </div>
+
+      <main id="screens">
+        <!-- ───────────────────────── ĐĂNG NHẬP / ĐĂNG KÝ ───────────────────────── -->
+        <section class="screen" id="screen-auth" data-screen="auth">
+          <div class="auth-shell">
+            <aside class="brand">
+              <div class="brand-top">
+                <span class="logo-mark" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" fill="none">
+                    <path d="M32 8c4.6 5.2 6.8 10.4 6.8 15.6 0 5.3-2.2 9.6-6.8 13.4-4.6-3.8-6.8-8.1-6.8-13.4C25.2 18.4 27.4 13.2 32 8Z" fill="currentColor"/>
+                    <path d="M32 20c6.4 3.6 10.9 8 13.4 13.2 2.5 5.3 2.4 10.6-.2 15.2-4.9.7-9.4-.6-13.2-3.7-3.8 3.1-8.3 4.4-13.2 3.7-2.6-4.6-2.7-9.9-.2-15.2C21.1 28 25.6 23.6 32 20Z" fill="currentColor" opacity=".55"/>
+                    <path d="M9 45.5c4.6 4.4 10.1 6.8 16.6 7.2 2.1.1 4.2-.1 6.4-.6 2.2.5 4.3.7 6.4.6 6.5-.4 12-2.8 16.6-7.2-1.1 5-4.1 8.4-9 10.2-4.6 1.7-9.3 1.6-14-.3-4.7 1.9-9.4 2-14 .3-4.9-1.8-7.9-5.2-9-10.2Z" fill="currentColor" opacity=".8"/>
+                  </svg>
+                </span>
+                <span class="brand-word">Đi Tu <em>Online</em></span>
+              </div>
+
+              <h1 class="brand-title">Một chốn bình yên,<br />ngay trong lòng bàn tay.</h1>
+              <p class="brand-lede">
+                Mười ngôi chùa giữa mây ngàn, mỗi chùa là một khoảng lặng riêng.
+                Bước vào, thắp nén hương, ngồi xuống và để tâm lắng lại.
+              </p>
+
+              <ul class="brand-stats">
+                <li><strong>10</strong><span>ngôi chùa</span></li>
+                <li><strong>50</strong><span>người mỗi chùa</span></li>
+                <li><strong>∞</strong><span>những phút an yên</span></li>
+              </ul>
+
+              <p class="brand-quote">“Tâm tĩnh thì thế giới tĩnh.”</p>
+            </aside>
+
+            <div class="auth-card" id="auth-card">
+              <div class="auth-tabs" role="tablist">
+                <button type="button" class="auth-tab is-active" data-tab="login" role="tab" aria-selected="true">Đăng nhập</button>
+                <button type="button" class="auth-tab" data-tab="register" role="tab" aria-selected="false">Đăng ký</button>
+                <span class="tab-thumb" aria-hidden="true"></span>
+              </div>
+
+              <div class="auth-body">
+                <!-- Đăng nhập -->
+                <form id="form-login" class="auth-form" data-panel="login" novalidate>
+                  <div class="field" data-field="identifier">
+                    <label for="login-identifier">Email hoặc tên hiển thị</label>
+                    <div class="input-wrap">
+                      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.6"/><path d="M4.8 20c.9-3.5 3.7-5.4 7.2-5.4s6.3 1.9 7.2 5.4"/></svg>
+                      <input id="login-identifier" name="identifier" type="text" autocomplete="username" placeholder="ban@email.com" required />
+                    </div>
+                    <p class="error" data-error></p>
+                  </div>
+
+                  <div class="field" data-field="password">
+                    <label for="login-password">Mật khẩu</label>
+                    <div class="input-wrap">
+                      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="10.5" width="14" height="9.5" rx="2.4"/><path d="M8.2 10.5V8a3.8 3.8 0 0 1 7.6 0v2.5"/></svg>
+                      <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Tối thiểu 8 ký tự" required />
+                      <button type="button" class="eye" data-eye="login-password" aria-label="Hiện mật khẩu">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>
+                      </button>
+                    </div>
+                    <p class="error" data-error></p>
+                  </div>
+
+                  <div class="auth-row">
+                    <label class="check"><input type="checkbox" id="login-remember" checked /><span></span>Ghi nhớ đăng nhập</label>
+                    <button type="button" class="link" id="btn-forgot">Quên mật khẩu?</button>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary btn-lg" data-submit>
+                    <span class="btn-label">Bước vào chùa</span>
+                    <span class="spinner" aria-hidden="true"></span>
+                  </button>
+
+                  <p class="auth-switch">Chưa có tài khoản? <button type="button" class="link" data-goto-tab="register">Đăng ký ngay</button></p>
+                </form>
+
+                <!-- Đăng ký -->
+                <form id="form-register" class="auth-form" data-panel="register" hidden novalidate>
+                  <div class="field" data-field="username">
+                    <label for="reg-username">Tên hiển thị</label>
+                    <div class="input-wrap">
+                      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.6"/><path d="M4.8 20c.9-3.5 3.7-5.4 7.2-5.4s6.3 1.9 7.2 5.4"/></svg>
+                      <input id="reg-username" name="username" type="text" autocomplete="username" placeholder="Thích Minh Tâm" maxlength="20" required />
+                    </div>
+                    <p class="hint">3–20 ký tự, không dấu cách.</p>
+                    <p class="error" data-error></p>
+                  </div>
+
+                  <div class="field" data-field="email">
+                    <label for="reg-email">Email</label>
+                    <div class="input-wrap">
+                      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.2" y="5.4" width="17.6" height="13.2" rx="2.6"/><path d="m4 7 8 6 8-6"/></svg>
+                      <input id="reg-email" name="email" type="email" autocomplete="email" placeholder="ban@email.com" required />
+                    </div>
+                    <p class="error" data-error></p>
+                  </div>
+
+                  <div class="field" data-field="password">
+                    <label for="reg-password">Mật khẩu</label>
+                    <div class="input-wrap">
+                      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="10.5" width="14" height="9.5" rx="2.4"/><path d="M8.2 10.5V8a3.8 3.8 0 0 1 7.6 0v2.5"/></svg>
+                      <input id="reg-password" name="password" type="password" autocomplete="new-password" placeholder="Tối thiểu 8 ký tự, có chữ và số" required />
+                      <button type="button" class="eye" data-eye="reg-password" aria-label="Hiện mật khẩu">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>
+                      </button>
+                    </div>
+                    <div class="strength" data-strength hidden><i></i><i></i><i></i><span></span></div>
+                    <p class="error" data-error></p>
+                  </div>
+
+                  <div class="field" data-field="confirmPassword">
+                    <label for="reg-confirm">Nhập lại mật khẩu</label>
+                    <div class="input-wrap">
+                      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3.6 4.8 6.5v5.2c0 4.4 3 7.9 7.2 9.1 4.2-1.2 7.2-4.7 7.2-9.1V6.5L12 3.6Z"/><path d="m8.7 12.1 2.2 2.2 4.4-4.4"/></svg>
+                      <input id="reg-confirm" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Nhập lại mật khẩu" required />
+                      <button type="button" class="eye" data-eye="reg-confirm" aria-label="Hiện mật khẩu">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>
+                      </button>
+                    </div>
+                    <p class="error" data-error></p>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary btn-lg" data-submit>
+                    <span class="btn-label">Tạo tài khoản</span>
+                    <span class="spinner" aria-hidden="true"></span>
+                  </button>
+
+                  <p class="auth-switch">Đã có tài khoản? <button type="button" class="link" data-goto-tab="login">Đăng nhập</button> · <button type="button" class="link" id="btn-forgot-reg">Quên mật khẩu?</button></p>
+                </form>
+              </div>
+
+              <p class="auth-fine">Bằng việc tiếp tục, bạn nguyện giữ lời lành và tâm an lạc.</p>
+            </div>
+          </div>
+          <button type="button" class="server-chip" id="server-chip" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>
+            <span id="server-chip-label">Máy chủ</span>
+          </button>
+        </section>
+
+        <!-- ───────────────────────── CHỌN GIỚI TÍNH ───────────────────────── -->
+        <section class="screen" id="screen-gender" data-screen="gender" hidden>
+          <div class="gender-shell">
+            <header class="step-head">
+              <span class="step-badge">Bước 2 / 3</span>
+              <h2>Bạn sẽ khoác hình hài nào?</h2>
+              <p>Hình dáng này sẽ theo bạn suốt những ngày tu tập nơi cửa Phật.</p>
+            </header>
+
+            <div class="gender-stage">
+              <canvas id="gender-canvas" aria-label="Xem trước hình dáng nhân vật"></canvas>
+              <div class="gender-sides">
+                <button type="button" class="gender-side" data-gender="male" aria-label="Chọn nam"></button>
+                <button type="button" class="gender-side" data-gender="female" aria-label="Chọn nữ"></button>
+              </div>
+              <div class="stage-caption" id="stage-caption">Chạm vào một hình để chọn</div>
+            </div>
+
+            <div class="gender-options">
+              <button type="button" class="gender-card" data-gender="male">
+                <span class="g-radio"></span>
+                <span class="g-copy">
+                  <strong>Nam</strong>
+                  <em>Đầu trọc — tăng sĩ</em>
+                  <span>Áo nâu sòng, đầu cạo sạch, bước đi khoan thai.</span>
+                </span>
+              </button>
+              <button type="button" class="gender-card" data-gender="female">
+                <span class="g-radio"></span>
+                <span class="g-copy">
+                  <strong>Nữ</strong>
+                  <em>Nón ni cô — nữ tu</em>
+                  <span>Khăn trùm thanh tịnh, áo lam nhạt, dáng vẻ dịu dàng.</span>
+                </span>
+              </button>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-lg" id="gender-next" disabled>
+              <span class="btn-label">Tiếp tục</span>
+            </button>
+            <p class="fine-print">Bạn có thể xem lại lựa chọn trước khi bước vào chùa.</p>
+          </div>
+        </section>
+
+        <!-- ───────────────────────── CHỌN CHÙA ───────────────────────── -->
+        <section class="screen" id="screen-temples" data-screen="temples" hidden>
+          <div class="temples-shell">
+            <header class="temples-top">
+              <div class="user-chip" id="user-chip">
+                <span class="user-avatar" id="user-avatar" aria-hidden="true"></span>
+                <span class="user-meta">
+                  <strong id="user-name">—</strong>
+                  <span><b id="user-merit">0</b> công đức</span>
+                </span>
+              </div>
+              <div class="temples-top-actions">
+                <button type="button" class="icon-btn" id="btn-temples-logout" title="Đăng xuất" aria-label="Đăng xuất">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M15 4h3.2A1.8 1.8 0 0 1 20 5.8v12.4a1.8 1.8 0 0 1-1.8 1.8H15"/><path d="M10 8l-4 4 4 4M6 12h9"/></svg>
+                </button>
+              </div>
+            </header>
+
+            <div class="temples-head">
+              <div>
+                <span class="eyebrow">Bước 3 / 3</span>
+                <h2>Chọn một ngôi chùa</h2>
+                <p>Mỗi chùa là một không gian riêng, tối đa <b>50 người</b> và có kênh trò chuyện riêng.</p>
+              </div>
+              <div class="capacity-note"><i class="dot"></i><span id="total-online">0</span> người đang tu tập</div>
+            </div>
+
+            <div class="temple-grid" id="temple-grid" aria-live="polite"></div>
+
+            <footer class="temples-foot">
+              <p>Chùa đông người vẫn có thể vào khi còn chỗ. Hãy chọn nơi khiến bạn thấy nhẹ lòng.</p>
+            </footer>
+          </div>
+        </section>
+
+        <!-- ───────────────────────── TRONG GAME ───────────────────────── -->
+        <section class="screen" id="screen-game" data-screen="game" hidden>
+          <canvas id="game-canvas"></canvas>
+
+          <div class="game-vignette" aria-hidden="true"></div>
+          <div class="loading-veil" id="game-loading">
+            <div class="lotus-loader" aria-hidden="true"><i></i><i></i><i></i></div>
+            <p>Đang mở cổng chùa…</p>
+          </div>
+
+          <div class="hud">
+            <div class="hud-top">
+              <button type="button" class="hud-pill temple-pill" id="btn-temple-info">
+                <span class="pill-dot"></span>
+                <span class="pill-text">
+                  <strong id="hud-temple">—</strong>
+                  <em id="hud-weather">—</em>
+                </span>
+              </button>
+
+              <div class="hud-right">
+                <div class="hud-pill stat-pill" title="Công đức">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3.5c2.2 2.4 3.3 4.9 3.3 7.4S14.2 15.8 12 18c-2.2-2.2-3.3-4.6-3.3-7.1S9.8 5.9 12 3.5Z"/><path d="M4.5 13.5c2.6.6 4.6 1.9 6 3.9M19.5 13.5c-2.6.6-4.6 1.9-6 3.9"/><path d="M5 20.5h14"/></svg>
+                  <b id="hud-merit">0</b>
+                </div>
+                <div class="hud-pill stat-pill" title="Số người trong chùa">
+                  <i class="dot"></i><b id="hud-online">1</b><span>/50</span>
+                </div>
+                <button type="button" class="hud-btn" id="btn-sound" aria-label="Bật/tắt âm thanh" title="Âm thanh">
+                  <svg class="i-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.6a7.7 7.7 0 0 1 0 10.8"/></svg>
+                  <svg class="i-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z"/><path d="m16 9.5 5 5M21 9.5l-5 5"/></svg>
+                </button>
+                <button type="button" class="hud-btn" id="btn-menu" aria-label="Menu" title="Menu">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="hud-hint" id="hud-hint">
+              <span class="desk-only">WASD để đi · kéo chuột để xoay · Enter để chat</span>
+              <span class="touch-only">Chạm giữ và kéo để đi · kéo vùng trống để xoay</span>
+            </div>
+
+            <div class="joystick" id="joystick" aria-hidden="true">
+              <div class="joystick-ring"></div>
+              <div class="joystick-stick" id="joystick-stick"></div>
+            </div>
+
+            <div class="action-dock">
+              <button type="button" class="act act-chat" id="btn-chat" aria-label="Mở chat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 12.2c0 3.9-3.6 7-8 7-1.1 0-2.2-.2-3.1-.6L4 20l1.3-3.6C4.5 15.2 4 13.7 4 12.2c0-3.9 3.6-7 8-7s8 3.1 8 7Z"/><circle cx="9" cy="12.2" r=".9" fill="currentColor" stroke="none"/><circle cx="12" cy="12.2" r=".9" fill="currentColor" stroke="none"/><circle cx="15" cy="12.2" r=".9" fill="currentColor" stroke="none"/></svg>
+                <span class="badge" id="chat-badge" hidden>0</span>
+              </button>
+
+              <button type="button" class="act" data-act="incense" aria-label="Dâng hương">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 21h6M10 21v-4h4v4"/><path d="M12 17v-3"/><path d="M8 14h8"/><path d="M12 12.5c-1.4-1.3-1.6-2.6-.6-3.9M12 8.5c1.2-1.1 1.4-2.2.6-3.4"/></svg>
+                <span class="act-label">Hương</span>
+              </button>
+              <button type="button" class="act" data-act="bell" aria-label="Thỉnh chuông">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 16.5h10l-1.4-2.2V10a3.6 3.6 0 0 0-7.2 0v4.3L7 16.5Z"/><path d="M12 6.2V4.4M12 19.4a2 2 0 0 0 2-1.9h-4a2 2 0 0 0 2 1.9Z"/></svg>
+                <span class="act-label">Chuông</span>
+              </button>
+              <button type="button" class="act" data-act="bow" aria-label="Lạy Phật">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="6.2" r="2.1"/><path d="M12 8.6v5.3M12 13.9 8.4 18M12 13.9 15.6 18M7 11.3l5-2.1 5 2.1"/></svg>
+                <span class="act-label">Lạy</span>
+              </button>
+              <button type="button" class="act" data-act="meditate" aria-label="Thiền định">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="6.4" r="2.1"/><path d="M12 9.2v3.4M6.5 16.6c0-2 2.4-3.6 5.5-3.6s5.5 1.6 5.5 3.6c0 1-.8 1.6-2 1.6H8.5c-1.2 0-2-.6-2-1.6Z"/><path d="M9.2 12.9c-1.6.9-2.8 2.2-3.6 3.9M14.8 12.9c1.6.9 2.8 2.2 3.6 3.9"/></svg>
+                <span class="act-label">Thiền</span>
+              </button>
+            </div>
+
+            <button type="button" class="hud-back" id="btn-back-temples" title="Rời chùa" aria-label="Rời chùa">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m14.5 5.5-7 6.5 7 6.5"/></svg>
+              <span>Rời chùa</span>
+            </button>
+          </div>
+
+          <aside class="chat-panel" id="chat-panel" hidden>
+            <header class="chat-head">
+              <div>
+                <strong id="chat-title">Chùa</strong>
+                <span id="chat-sub">0 người đang tu</span>
+              </div>
+              <button type="button" class="chat-close" id="chat-close" aria-label="Đóng chat">✕</button>
+            </header>
+            <div class="chat-body" id="chat-body"></div>
+            <div class="chat-typing" id="chat-typing"></div>
+            <form class="chat-form" id="chat-form">
+              <input id="chat-input" type="text" maxlength="220" placeholder="Gửi lời nhắn tới chùa…" autocomplete="off" enterkeyhint="send" />
+              <button type="submit" aria-label="Gửi">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12 20 5l-6.4 15-2.4-6.2L4 12Z"/></svg>
+              </button>
+            </form>
+          </aside>
+
+          <div class="toast-stack" id="toast-root-game"></div>
+        </section>
+      </main>
+    </div>
+
+    <div id="modal-root"></div>
+    <div class="toast-stack" id="toast-root"></div>
+
+    <div class="boot" id="boot">
+      <div class="boot-inner">
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none">
+            <path d="M32 8c4.6 5.2 6.8 10.4 6.8 15.6 0 5.3-2.2 9.6-6.8 13.4-4.6-3.8-6.8-8.1-6.8-13.4C25.2 18.4 27.4 13.2 32 8Z" fill="currentColor"/>
+            <path d="M32 22c6.4 3.6 10.9 8 13.4 13.2 2.5 5.3 2.4 10.6-.2 15.2-4.9.7-9.4-.6-13.2-3.7-3.8 3.1-8.3 4.4-13.2 3.7-2.6-4.6-2.7-9.9-.2-15.2C21.1 28 25.6 23.6 32 22Z" fill="currentColor" opacity=".55"/>
+          </svg>
+        </span>
+        <span class="boot-title">Đi Tu Online</span>
+        <span class="boot-bar"><i></i></span>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

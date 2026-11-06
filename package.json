@@ -1,0 +1,34 @@
+{
+  "name": "di-tu-online",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Đi Tu Online - game tu tập trực tuyến 3D, 10 chùa, chat theo chùa",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:server": "node --watch server/index.js",
+    "dev:client": "vite",
+    "build": "vite build",
+    "start": "node server/index.js",
+    "android:sync": "npm run build && cap sync android",
+    "android:open": "cap open android",
+    "android:apk": "npm run android:sync && cd android && ./gradlew assembleDebug",
+    "android:bundle": "npm run android:sync && cd android && ./gradlew bundleRelease"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.4.3",
+    "express": "^4.21.2",
+    "nodemailer": "^7.0.9",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "three": "^0.181.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/cli": "^7.4.3",
+    "vite": "^7.2.2"
+  }
+}

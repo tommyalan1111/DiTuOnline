@@ -1,0 +1,12 @@
+{
+  "appId": "com.ditu.online",
+  "appName": "Đi Tu Online",
+  "webDir": "server/public",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#0d1712"
+  }
+}
