@@ -114,6 +114,15 @@ VITE_DEFAULT_SERVER=http://192.168.1.10:3000 npm run android:apk
 
 ---
 
+## Triển khai lên Internet
+
+Hướng dẫn chi tiết cho Render (miễn phí), Cloudflare Tunnel và VPS Oracle:
+xem [docs/DEPLOY.md](docs/DEPLOY.md).
+
+Bản deploy sẵn có: [`render.yaml`](render.yaml), [`Dockerfile`](Dockerfile).
+
+---
+
 ## Cấu hình
 
 | Biến môi trường | Mặc định | Ý nghĩa |

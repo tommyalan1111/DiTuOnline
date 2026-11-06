@@ -1,0 +1,26 @@
+# Deploy lên Render (https://render.com) — gói Free
+# Cách dùng: đẩy file này lên GitHub, vào Render → New → Blueprint → chọn repo.
+services:
+  - type: web
+    name: ditu-online
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: NODE_ENV
+        value: production
+      # Khoá ký token cố định (nếu không đặt, mỗi lần restart sẽ tạo khoá mới)
+      - key: AUTH_SECRET
+        generateValue: true
+      # ⚠ Gói Free không có ổ đĩa vĩnh viễn → dữ liệu SQLite mất khi deploy lại.
+      # Nếu nâng lên gói có disk (Starter), thêm:
+      # disk:
+      #   name: ditu-data
+      #   mountPath: /var/data
+      #   sizeGB: 1
+      # và đặt biến DATA_DIR=/var/data
