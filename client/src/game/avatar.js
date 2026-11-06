@@ -4,34 +4,77 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 export const LOOKS = {
   male: {
     label: 'Nam',
-    robe: '#9e322b',
-    robeDark: '#7a241f',
-    trim: '#d4af37',
-    skin: '#d5a57b',
-    sash: '#c9a227',
-    beads: '#3f2a1a',
-    sleeve: '#c9a36c',
-    cap: '#d4af37',
+    robe: '#9fb3ba',
+    robeDark: '#8ba0a7',
+    apron: '#e9c35b',
+    skin: '#e8b98e',
+    sleeve: '#9fb3ba',
+    cap: null,
+    beads: '#5a4030',
+    shoe: '#efe9dc',
   },
   female: {
     label: 'Nữ',
-    robe: '#8f857a',
-    robeDark: '#776e64',
-    trim: '#d9cebb',
-    skin: '#dfb08a',
-    sash: '#6b5b4a',
-    beads: '#4a3020',
-    sleeve: '#8f857a',
+    robe: '#a99a8c',
+    robeDark: '#94867a',
+    apron: '#dcc9a6',
+    skin: '#efc39c',
+    sleeve: '#a99a8c',
     cap: '#6d4b38',
+    beads: '#5a4030',
+    shoe: '#efe9dc',
   },
 };
 
-const EYE_COLOR = '#2a1f19';
-const BROW_COLOR = '#6b5136';
+/* ------------------------------------------------------------------ */
+/* texture mặt cười (dùng chung, 1 lần duy nhất)                       */
+/* ------------------------------------------------------------------ */
 
-/* ------------------------------------------------------------------ */
-/* tiện ích                                                            */
-/* ------------------------------------------------------------------ */
+let _faceTex = null;
+
+function faceTexture() {
+  if (_faceTex) return _faceTex;
+  const c = document.createElement('canvas');
+  c.width = 512;
+  c.height = 512;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, 512, 512);
+
+  // má hồng
+  for (const x of [120, 392]) {
+    const g = ctx.createRadialGradient(x, 348, 0, x, 348, 84);
+    g.addColorStop(0, 'rgba(230,120,110,0.62)');
+    g.addColorStop(0.6, 'rgba(230,128,118,0.22)');
+    g.addColorStop(1, 'rgba(230,128,118,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, 350, 70, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // mắt cười khép
+  ctx.strokeStyle = '#4a3327';
+  ctx.lineWidth = 17;
+  ctx.lineCap = 'round';
+  for (const x of [168, 344]) {
+    ctx.beginPath();
+    ctx.arc(x, 300, 40, Math.PI * 1.12, Math.PI * 1.88);
+    ctx.stroke();
+  }
+
+  // miệng
+  ctx.strokeStyle = '#7a4b3a';
+  ctx.lineWidth = 12;
+  ctx.beginPath();
+  ctx.arc(256, 378, 30, Math.PI * 0.18, Math.PI * 0.82);
+  ctx.stroke();
+
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.flipY = false;
+  _faceTex = t;
+  return t;
+}
 
 function colorize(geo, hex) {
   const c = new THREE.Color(hex);
@@ -142,7 +185,7 @@ function makeBubbleTexture(text) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Avatar                                                              */
+/* Avatar chibi                                                        */
 /* ------------------------------------------------------------------ */
 
 export class Avatar {
@@ -168,222 +211,130 @@ export class Avatar {
     this.body = new THREE.Group();
     this.root.add(this.body);
 
-    /* ── thân áo: gộp 1 mesh, nhiều màu bằng vertex color ── */
+    /* ── thân: áo choàng tròn + tạp dề vàng + giày ── */
 
     const bodyGeos = [];
 
-    // áo dài: hẹp ở eo, xoè ở gấu
-    const robeProfile = [
-      new THREE.Vector2(0.168, 1.12),
-      new THREE.Vector2(0.205, 1.04),
-      new THREE.Vector2(0.216, 0.9),
-      new THREE.Vector2(0.236, 0.74),
-      new THREE.Vector2(0.278, 0.42),
-      new THREE.Vector2(0.338, 0.11),
-      new THREE.Vector2(0.358, 0.005),
-    ];
-    bodyGeos.push(colorize(new THREE.LatheGeometry(robeProfile, 26), look.robe));
+    const smock = new THREE.SphereGeometry(0.36, 26, 20);
+    smock.scale(1, 1.2, 0.95);
+    smock.translate(0, 0.6, 0);
+    bodyGeos.push(colorize(smock, look.robe));
 
+    // tạp dề trước bụng
+    const apron = new THREE.SphereGeometry(0.368, 26, 20, Math.PI / 2 - 0.75, 1.5, Math.PI * 0.44, Math.PI * 0.5);
+    apron.scale(1, 1.2, 0.95);
+    apron.translate(0, 0.6, 0);
+    bodyGeos.push(colorize(apron, look.apron));
 
-    // đáy áo (tránh nhìn thấy khoang rỗng từ góc thấp)
-    const sole = new THREE.CircleGeometry(0.357, 26);
-    sole.rotateX(Math.PI / 2);
-    sole.translate(0, 0.007, 0);
-    bodyGeos.push(colorize(sole, look.robeDark));
-
-    // vai (cùng màu áo để không tạo mảng tối)
-    const shoulders = new THREE.SphereGeometry(0.232, 18, 12);
-    shoulders.scale(gender === 'female' ? 0.96 : 1.04, 0.56, 0.8);
-    shoulders.translate(0, 1.045, 0);
-    bodyGeos.push(colorize(shoulders, look.robe));
-
-    // cổ áo tròn
-    const collar = new THREE.CylinderGeometry(0.18, 0.19, 0.05, 24, 1, true);
-    collar.translate(0, 1.094, 0);
-    bodyGeos.push(colorize(collar, look.trim));
-
-    // thắt lưng (dưới lớp choàng)
-    const sash = new THREE.TorusGeometry(0.25, 0.026, 8, 30);
-    sash.rotateX(Math.PI / 2);
-    sash.translate(0, 0.72, 0);
-    bodyGeos.push(colorize(sash, look.sash));
-
-    // nút thắt + hai dải buông
-    const knot = new THREE.SphereGeometry(0.038, 8, 6);
-    knot.translate(0.045, 0.715, 0.245);
-    bodyGeos.push(colorize(knot, look.sash));
-
-    for (const [dx, rot] of [
-      [0.02, 0.16],
-      [0.09, -0.1],
-    ]) {
-      const tail = new THREE.BoxGeometry(0.04, 0.22, 0.02);
-      tail.rotateZ(rot);
-      tail.translate(dx, 0.6, 0.235);
-      bodyGeos.push(colorize(tail, look.sash));
+    // giày
+    for (const sx of [-1, 1]) {
+      const shoe = new THREE.SphereGeometry(0.088, 12, 9);
+      shoe.scale(1.1, 0.7, 1.45);
+      shoe.translate(sx * 0.1, 0.062, 0.15);
+      bodyGeos.push(colorize(shoe, look.shoe));
     }
 
     this.bodyMesh = new THREE.Mesh(
       mergeGeometries(bodyGeos),
-      new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.93, metalness: 0 }),
+      new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, metalness: 0 }),
     );
     this.bodyMesh.castShadow = isSelf;
     this.body.add(this.bodyMesh);
 
-    /* ── thân trên: đầu, cổ, tràng hạt, khăn trùm ── */
+    /* ── đầu to ── */
 
     this.spine = new THREE.Group();
-    this.spine.position.y = 1.01;
+    this.spine.position.y = 0.88;
     this.body.add(this.spine);
 
-    const spineGeos = [];
+    const headGeos = [];
 
-    const neck = new THREE.CylinderGeometry(0.075, 0.09, 0.16, 10);
-    neck.translate(0, 0.07, 0);
-    spineGeos.push(colorize(neck, look.skin));
-
-    const head = new THREE.SphereGeometry(0.175, 24, 18);
-    head.scale(0.96, 1.03, 0.95);
-    head.translate(0, 0.29, 0);
-    spineGeos.push(colorize(head, look.skin));
-
-    // tai
-    for (const sx of [-1, 1]) {
-      const ear = new THREE.SphereGeometry(0.045, 8, 6);
-      ear.scale(0.55, 1, 0.8);
-      ear.translate(sx * 0.167, 0.285, 0.005);
-      spineGeos.push(colorize(ear, look.skin));
-    }
-
-    // lông mày
-    for (const sx of [-1, 1]) {
-      const brow = new THREE.BoxGeometry(0.052, 0.009, 0.015);
-      brow.rotateZ(-sx * 0.07);
-      brow.translate(sx * 0.063, 0.345, 0.158);
-      spineGeos.push(colorize(brow, BROW_COLOR));
-    }
+    const head = new THREE.SphereGeometry(0.3, 30, 22);
+    head.scale(1, 0.98, 0.96);
+    head.translate(0, 0.24, 0);
+    headGeos.push(colorize(head, look.skin));
 
     if (gender === 'female') {
-      // nón ni cô: chỏm trùm kín tóc, chừa khuôn mặt
-      const cap = new THREE.SphereGeometry(0.19, 26, 18, Math.PI * 0.78, Math.PI * 1.44, 0, Math.PI * 0.6);
-      cap.scale(1, 1.02, 1.03);
-      cap.translate(0, 0.295, 0);
-      spineGeos.push(colorize(cap, look.cap));
+      // khăn trùm nâu ôm đầu, chừa mặt
+      const cap = new THREE.SphereGeometry(0.313, 28, 20, Math.PI * 0.78, Math.PI * 1.44, 0, Math.PI * 0.7);
+      cap.scale(1, 0.99, 0.97);
+      cap.translate(0, 0.24, 0);
+      headGeos.push(colorize(cap, look.cap));
 
-      // đỉnh khăn: phủ phần trên trán (vá chỗ hở của chỏm)
-      const crown = new THREE.SphereGeometry(0.192, 24, 10, 0, Math.PI * 2, 0, Math.PI * 0.38);
-      crown.translate(0, 0.295, 0);
-      spineGeos.push(colorize(crown, look.cap));
+      const crown = new THREE.SphereGeometry(0.313, 28, 12, 0, Math.PI * 2, 0, Math.PI * 0.4);
+      crown.scale(1, 0.99, 0.97);
+      crown.translate(0, 0.24, 0);
+      headGeos.push(colorize(crown, look.cap));
 
-      // vành khăn quanh mặt
-      const brim = new THREE.TorusGeometry(0.187, 0.017, 6, 26, Math.PI * 0.92);
+      const brim = new THREE.TorusGeometry(0.305, 0.03, 8, 26, Math.PI * 0.92);
       brim.rotateX(Math.PI / 2);
       brim.rotateZ(Math.PI * 0.04);
-      brim.translate(0, 0.37, 0.01);
-      spineGeos.push(colorize(brim, '#7d5842'));
-
+      brim.translate(0, 0.305, 0.012);
+      headGeos.push(colorize(brim, '#7d5842'));
     } else {
-      // mũ Tỳ Lư (5 lá) — nét đặc trưng của tăng sĩ mặc lễ phục
-      const band = new THREE.CylinderGeometry(0.146, 0.152, 0.07, 22);
-      band.translate(0, 0.405, 0);
-      spineGeos.push(colorize(band, look.cap));
-
-      for (let i = 0; i < 5; i++) {
-        const a = -0.75 + (i / 4) * 1.5;
-        const petal = new THREE.BoxGeometry(0.072, 0.17, 0.02);
-        petal.translate(0, 0.085, 0);
-        petal.rotateX(-0.22);
-        petal.rotateY(a);
-        petal.translate(Math.sin(a) * 0.148, 0.43, Math.cos(a) * 0.148);
-        spineGeos.push(colorize(petal, look.cap));
-      }
-
-      const top = new THREE.SphereGeometry(0.028, 8, 6);
-      top.translate(0, 0.625, 0);
-      spineGeos.push(colorize(top, look.cap));
-
-      // hai dải lụa vàng buông trước ngực
-      for (const sx of [-1, 1]) {
-        const ribbon = new THREE.BoxGeometry(0.026, 0.42, 0.008);
-        ribbon.rotateZ(sx * 0.05);
-        ribbon.translate(sx * 0.118, 0.19, 0.215);
-        spineGeos.push(colorize(ribbon, '#e8c25a'));
+      // ba chấm giới
+      for (let i = 0; i < 3; i++) {
+        const dot = new THREE.SphereGeometry(0.016, 6, 5);
+        dot.translate(0, 0.5, 0.055 + i * 0.036);
+        headGeos.push(colorize(dot, '#b08262'));
       }
     }
 
-    // tràng hạt: chuỗi hạt tròn treo trước ngực
-    const beadCount = 14;
-    for (let i = 0; i < beadCount; i++) {
-      const a = (i / beadCount) * Math.PI * 2;
-      const b = new THREE.SphereGeometry(0.0135, 6, 5);
-      b.translate(Math.cos(a) * 0.078, -0.12 + Math.sin(a) * 0.078, 0.262);
-      spineGeos.push(colorize(b, look.beads));
-    }
-    for (let i = 0; i < 2; i++) {
-      const b = new THREE.SphereGeometry(0.016, 6, 5);
-      b.translate(0, -0.215 - i * 0.036, 0.262);
-      spineGeos.push(colorize(b, look.beads));
-    }
-
-    this.spineMesh = new THREE.Mesh(
-      mergeGeometries(spineGeos),
-      new THREE.MeshStandardMaterial({
-        vertexColors: true,
-        roughness: 0.82,
-        metalness: 0,
-        side: THREE.DoubleSide,
-      }),
+    const headMesh = new THREE.Mesh(
+      mergeGeometries(headGeos),
+      new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, metalness: 0 }),
     );
-    this.spineMesh.castShadow = isSelf;
-    this.spine.add(this.spineMesh);
+    headMesh.castShadow = isSelf;
+    this.spine.add(headMesh);
 
-    // mắt
-    const eyeGeos = [-1, 1].map((sx) => {
-      const g = new THREE.SphereGeometry(0.02, 8, 6);
-      g.translate(sx * 0.062, 0.3, 0.155);
-      return g;
-    });
-    this.spine.add(
-      new THREE.Mesh(mergeGeometries(eyeGeos), new THREE.MeshBasicMaterial({ color: new THREE.Color(EYE_COLOR) })),
+    // khuôn mặt: decal cầu, texture trong suốt
+    const faceGeo = new THREE.SphereGeometry(0.304, 28, 22, Math.PI / 2 - 0.7, 1.4, Math.PI * 0.36, Math.PI * 0.38);
+    faceGeo.scale(1, 0.98, 0.96);
+    faceGeo.translate(0, 0.24, 0);
+    const faceMesh = new THREE.Mesh(
+      faceGeo,
+      new THREE.MeshBasicMaterial({ map: faceTexture(), transparent: true, depthWrite: false, fog: false }),
     );
+    faceMesh.renderOrder = 2;
+    this.spine.add(faceMesh);
 
-    /* ── tay: gộp 1 mesh ── */
+    /* ── tay ngắn ── */
 
     this.arms = new THREE.Group();
-    this.arms.position.y = 0.19;
+    this.arms.position.y = 0;
     this.spine.add(this.arms);
 
     const armGeos = [];
     for (const sx of [-1, 1]) {
-      const sleeve = new THREE.CylinderGeometry(0.076, 0.1, 0.46, 12);
-      sleeve.rotateZ(sx * 0.06);
-      sleeve.translate(sx * 0.238, -0.23, 0.012);
+      const sleeve = new THREE.CapsuleGeometry(0.1, 0.15, 6, 12);
+      sleeve.rotateZ(sx * 0.26);
+      sleeve.translate(sx * 0.385, -0.15, 0.02);
       armGeos.push(colorize(sleeve, look.sleeve));
 
-      const hand = new THREE.SphereGeometry(0.058, 10, 8);
-      hand.scale(0.9, 1.05, 0.9);
-      hand.translate(sx * 0.265, -0.485, 0.03);
+      const hand = new THREE.SphereGeometry(0.075, 12, 9);
+      hand.scale(0.92, 0.95, 0.92);
+      hand.translate(sx * 0.43, -0.3, 0.03);
       armGeos.push(colorize(hand, look.skin));
     }
     const armMesh = new THREE.Mesh(
       mergeGeometries(armGeos),
-      new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.92, metalness: 0 }),
+      new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, metalness: 0 }),
     );
     armMesh.castShadow = isSelf;
     this.arms.add(armMesh);
 
-    /* ── phụ kiện ngồi thiền ── */
+    /* ── phụ kiện thiền ── */
 
     this.cushion = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.48, 0.52, 0.09, 20),
+      new THREE.CylinderGeometry(0.56, 0.6, 0.09, 22),
       new THREE.MeshStandardMaterial({ color: 0x6b5a3e, roughness: 0.95 }),
     );
-    this.cushion.position.y = 0.045;
+    this.cushion.position.y = 0.04;
     this.cushion.visible = false;
     this.body.add(this.cushion);
 
     this.aura = new THREE.Mesh(
-      new THREE.RingGeometry(0.62, 0.8, 36),
+      new THREE.RingGeometry(0.66, 0.84, 36),
       new THREE.MeshBasicMaterial({
         color: 0xffd799,
         transparent: true,
@@ -410,7 +361,7 @@ export class Avatar {
         }),
       );
       this.label.scale.set(1.6, 0.4, 1);
-      this.label.position.y = 1.98;
+      this.label.position.y = 1.78;
       this.root.add(this.label);
     }
 
@@ -420,7 +371,7 @@ export class Avatar {
       new THREE.SpriteMaterial({ transparent: true, depthWrite: false, depthTest: false, fog: false }),
     );
     this.bubble.scale.set(2.1, 1.05, 1);
-    this.bubble.position.y = 2.2;
+    this.bubble.position.y = 2.02;
     this.bubble.visible = false;
     this.bubble.renderOrder = 999;
     this.root.add(this.bubble);
@@ -474,15 +425,15 @@ export class Avatar {
     const bow = bowPhase * 0.95 + prayPhase * 0.1 + med * 0.04;
     this.spine.rotation.x = bow + (walk ? Math.sin(this.phase * 0.5) * 0.015 : 0);
 
-    const armSwing = walk ? Math.sin(this.phase) * 0.35 * (1 - med) : Math.sin(t * 1.2) * 0.02;
-    this.arms.rotation.x = armSwing - prayPhase * 1.15 - med * 0.3;
-    this.arms.rotation.z = med * 0.16;
+    const armSwing = walk ? Math.sin(this.phase) * 0.3 * (1 - med) : Math.sin(t * 1.2) * 0.02;
+    this.arms.rotation.x = armSwing - prayPhase * 1.1 - med * 0.3;
+    this.arms.rotation.z = med * 0.14;
 
-    const bob = walk ? Math.abs(Math.sin(this.phase)) * 0.035 : Math.sin(t * 1.6) * 0.008;
-    this.body.position.y = bob - med * 0.33;
-    this.body.scale.set(1 + med * 0.12, 1 - med * 0.3, 1 + med * 0.12);
+    const bob = walk ? Math.abs(Math.sin(this.phase)) * 0.03 : Math.sin(t * 1.6) * 0.008;
+    this.body.position.y = bob - med * 0.3;
+    this.body.scale.set(1 + med * 0.12, 1 - med * 0.28, 1 + med * 0.12);
 
-    if (!this.moving && med < 0.4) this.spine.rotation.y = Math.sin(t * 0.5) * 0.08;
+    if (!this.moving && med < 0.4) this.spine.rotation.y = Math.sin(t * 0.5) * 0.09;
     else this.spine.rotation.y *= 0.94;
 
     this.cushion.visible = med > 0.25;
