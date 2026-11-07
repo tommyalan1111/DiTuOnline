@@ -18,6 +18,7 @@ Có **10 ngôi chùa**, mỗi chùa tối đa **50 người** và có **kênh ch
 | Nhiều người | Đồng bộ vị trí, hướng đi, tư thế ngồi thiền, lạy, dâng hương; hiển thị tên và bong bóng chat trên đầu nhân vật |
 | Giới hạn | Mỗi chùa **50 chỗ**, server chặn người thứ 51, danh sách chùa cập nhật số người theo thời gian thực |
 | Chat | Kênh riêng từng chùa, lưu 40 tin gần nhất, chống spam (tối đa 6 tin/10 giây), hiển thị "đang nhập…" |
+| Sinh hoạt | 2 NPC (một tăng sĩ, một ni cô) cầm chổi đi qua lại quét sân; 2 con mèo đi dạo trong sân |
 | Tu tập | Lạy (+1 công đức), dâng hương (+3), thỉnh chuông (+2), thiền định có hào quang và đệm ngồi |
 | Âm thanh | Gió, chim hót, chuông chùa, bước chân — tổng hợp bằng WebAudio, không cần file âm thanh |
 | Android | Đóng gói bằng Capacitor, icon và splash riêng, hỗ trợ nhập địa chỉ máy chủ LAN |

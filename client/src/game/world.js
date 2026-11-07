@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { themeOf } from './theme.js';
 import { Cat } from './cats.js';
+import { NPC } from './npc.js';
 import {
   createHall,
   createGate,
@@ -695,6 +696,13 @@ export class World {
       cat.setBounds({ minX: -10.5, maxX: 10.5, minZ: 0.5, maxZ: 21 });
       this.scene.add(cat.group);
     }
+
+    // hai NPC quét sân: một tăng sĩ, một ni cô
+    this.npcs = [
+      new NPC({ gender: 'male', from: [-5.5, 4], to: [5.5, 4] }),
+      new NPC({ gender: 'female', from: [4.5, 15.5], to: [-4.5, 15.5] }),
+    ];
+    for (const npc of this.npcs) this.scene.add(npc.object3d);
   }
 
   /* ── cây ── */
@@ -857,6 +865,9 @@ export class World {
 
     // mèo đi dạo
     if (this.cats) for (const cat of this.cats) cat.update(dt);
+
+    // NPC quét sân
+    if (this.npcs) for (const npc of this.npcs) npc.update(dt, t);
 
     // chuông đung đưa
     if (this.bell?.userData.bell) {
