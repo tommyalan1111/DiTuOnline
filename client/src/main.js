@@ -10,6 +10,7 @@ import { toast } from './ui/toast.js';
 import { openModal, confirmDialog } from './ui/modal.js';
 import { $, show } from './ui/dom.js';
 import { IS_NATIVE, serverLabel, setServerUrl, SERVER_URL } from './config.js';
+import { initAds, syncAdBanner } from './ads.js';
 
 const SCREENS = ['auth', 'gender', 'temples', 'game'];
 
@@ -36,6 +37,7 @@ function showScreen(name) {
     }
   }
   document.body.dataset.screen = name;
+  syncAdBanner(name);
 }
 
 /* ------------------------------------------------------------------ */
@@ -131,6 +133,7 @@ async function logout() {
 
 async function boot() {
   initAuth({ onAuthenticated: afterAuth });
+  initAds();
 
   const params = new URLSearchParams(window.location.search);
   const resetToken = params.get('reset');

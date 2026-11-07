@@ -11,6 +11,12 @@
         android:hardwareAccelerated="true"
         android:theme="@style/AppTheme">
 
+        <!-- AdMob: đang dùng App ID thử nghiệm của Google.
+             Khi phát hành thật, thay bằng App ID trong tài khoản AdMob. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation"
             android:name=".MainActivity"

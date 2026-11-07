@@ -21,6 +21,7 @@ Có **10 ngôi chùa**, mỗi chùa tối đa **50 người** và có **kênh ch
 | Sinh hoạt | 2 NPC (một tăng sĩ, một ni cô) cầm chổi đi qua lại quét sân; 2 con mèo đi dạo trong sân |
 | Tu tập | Lạy (+1 công đức), dâng hương (+3), thỉnh chuông (+2), thiền định có hào quang và đệm ngồi |
 | Âm thanh | Gió, chim hót, chuông chùa, bước chân — tổng hợp bằng WebAudio, không cần file âm thanh |
+| Quảng cáo | Banner AdMob cố định ở mép dưới màn đăng nhập, đăng ký và chọn chùa (ẩn khi vào trong chùa) |
 | Android | Đóng gói bằng Capacitor, icon và splash riêng, hỗ trợ nhập địa chỉ máy chủ LAN |
 
 ---
@@ -32,6 +33,7 @@ client/            Giao diện + game 3D (Vite + Three.js, JavaScript thuần)
   index.html
   src/
     main.js        Điều hướng màn hình, luồng đăng nhập → giới tính → chọn chùa → game
+    ads.js         Banner AdMob: hiện/ẩn theo màn hình, chừa khoảng trống mép dưới
     ui/            Đăng ký/đăng nhập, chọn giới tính (3D preview), chọn chùa, modal, toast
     game/          Three.js: thế giới chùa, nhân vật, điều khiển, âm thanh, vòng lặp game
 shared/temples.js  Dữ liệu 10 chùa dùng chung cho server và client
@@ -139,6 +141,26 @@ Với địa chỉ cố định, dùng Render hoặc VPS (xem [docs/DEPLOY.md](d
 - Muốn hiện **mã QR Momo** trong popup: mở app Momo → *Nhận tiền* → lưu mã QR của bạn,
   đặt tên `momo-qr.png` và để vào `client/public/momo-qr.png`, rồi build lại.
   Nếu chưa có ảnh, popup vẫn hiện số Momo và nút sao chép.
+
+---
+
+## Quảng cáo (AdMob)
+
+Banner quảng cáo nằm **cố định ở mép dưới** ba màn hình: đăng nhập, đăng ký (cùng màn `auth`)
+và chọn chùa. Banner do SDK AdMob vẽ đè lên WebView, giao diện tự chừa khoảng trống qua biến
+CSS `--ad-h` nên nội dung không bị che.
+
+- Plugin: `@capacitor-community/admob` — logic ở [`client/src/ads.js`](client/src/ads.js)
+- App ID: `android/app/src/main/AndroidManifest.xml`
+- Banner ad unit ID: hằng `BANNER_AD_ID` trong `client/src/ads.js`
+
+Hiện dùng **quảng cáo thử nghiệm của Google** (`TESTING = true`). Khi phát hành thật:
+
+1. Tạo ứng dụng + banner trong [AdMob](https://admob.google.com/).
+2. Thay `com.google.android.gms.ads.APPLICATION_ID` trong `AndroidManifest.xml` bằng App ID thật.
+3. Thay `BANNER_AD_ID` và đặt `TESTING = false` trong `client/src/ads.js`.
+4. Nếu phát hành ở EU, bổ sung luồng consent UMP của plugin trước khi gọi `showBanner`.
+5. Build lại APK — banner chỉ có trong app Android, bản web không hiện quảng cáo.
 
 ---
 

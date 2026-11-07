@@ -20,6 +20,7 @@
     "public": "bash scripts/go-public.sh"
   },
   "dependencies": {
+    "@capacitor-community/admob": "^7.2.0",
     "@capacitor/core": "^7.4.3",
     "express": "^4.21.2",
     "nodemailer": "^7.0.9",

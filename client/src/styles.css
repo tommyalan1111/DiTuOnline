@@ -26,6 +26,8 @@
   --safe-b: env(safe-area-inset-bottom, 0px);
   --safe-l: env(safe-area-inset-left, 0px);
   --safe-r: env(safe-area-inset-right, 0px);
+  /* chỗ chừa cho banner quảng cáo ở mép dưới (do AdMob báo về) */
+  --ad-h: 0px;
 }
 
 * { box-sizing: border-box; }
@@ -184,6 +186,7 @@ svg { display: block; }
   max-width: 1180px;
   margin: auto;
   padding: clamp(24px, 5vh, 64px) clamp(20px, 5vw, 56px);
+  padding-bottom: calc(clamp(24px, 5vh, 64px) + var(--ad-h));
 }
 
 .brand { max-width: 520px; animation: rise 0.8s 0.05s both; }
@@ -501,7 +504,7 @@ svg { display: block; }
 .server-chip {
   position: fixed;
   left: 50%;
-  bottom: calc(10px + var(--safe-b));
+  bottom: calc(10px + var(--safe-b) + var(--ad-h));
   transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
@@ -670,7 +673,7 @@ svg { display: block; }
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: calc(16px + var(--safe-t)) clamp(16px, 3vw, 32px) calc(40px + var(--safe-b));
+  padding: calc(16px + var(--safe-t)) clamp(16px, 3vw, 32px) calc(40px + var(--safe-b) + var(--ad-h));
   display: flex;
   flex-direction: column;
   gap: 26px;
@@ -1354,7 +1357,7 @@ svg { display: block; }
 }
 
 @media (max-width: 640px) {
-  .auth-shell { padding: 16px 14px calc(30px + var(--safe-b)); gap: 20px; }
+  .auth-shell { padding: 16px 14px calc(30px + var(--safe-b) + var(--ad-h)); gap: 20px; }
   .brand-top { margin-bottom: 14px; }
   .brand-title { font-size: 1.42rem; margin-bottom: 10px; }
   .brand-lede { display: none; }
