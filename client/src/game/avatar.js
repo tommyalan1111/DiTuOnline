@@ -15,11 +15,11 @@ export const LOOKS = {
   },
   female: {
     label: 'Nữ',
-    robe: '#d98f3f',
-    robeDark: '#b9722a',
-    apron: '#d98f3f',
+    robe: '#f3efe4',
+    robeDark: '#ddd6c6',
+    apron: '#f3efe4',
     skin: '#efc39c',
-    sleeve: '#d98f3f',
+    sleeve: '#f3efe4',
     cap: '#6d4b38',
     beads: '#5a4030',
     shoe: '#efc39c',
@@ -30,10 +30,10 @@ export const LOOKS = {
 /* texture mặt cười (dùng chung, 1 lần duy nhất)                       */
 /* ------------------------------------------------------------------ */
 
-let _faceTex = null;
+const _faceTex = {};
 
-function faceTexture() {
-  if (_faceTex) return _faceTex;
+function faceTexture(gender = 'male') {
+  if (_faceTex[gender]) return _faceTex[gender];
   const c = document.createElement('canvas');
   c.width = 512;
   c.height = 512;
@@ -69,10 +69,29 @@ function faceTexture() {
   ctx.arc(256, 378, 30, Math.PI * 0.18, Math.PI * 0.82);
   ctx.stroke();
 
+  // lông mi cho nữ
+  if (gender === 'female') {
+    ctx.strokeStyle = '#3a2a20';
+    ctx.lineWidth = 7;
+    for (const [cx, dir] of [
+      [168, -1],
+      [344, 1],
+    ]) {
+      for (let i = 0; i < 3; i++) {
+        const ex = cx + dir * (34 + i * 3);
+        const ey = 292 - i * 6;
+        ctx.beginPath();
+        ctx.moveTo(ex, ey);
+        ctx.lineTo(ex + dir * (13 + i * 2), ey - 8 - i * 2);
+        ctx.stroke();
+      }
+    }
+  }
+
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
   t.flipY = true; // SphereGeometry có v=1 ở đỉnh → cần lật ảnh
-  _faceTex = t;
+  _faceTex[gender] = t;
   return t;
 }
 
@@ -301,7 +320,7 @@ export class Avatar {
     faceGeo.translate(0, 0.34, 0);
     const faceMesh = new THREE.Mesh(
       faceGeo,
-      new THREE.MeshBasicMaterial({ map: faceTexture(), transparent: true, depthWrite: false, fog: false }),
+      new THREE.MeshBasicMaterial({ map: faceTexture(gender), transparent: true, depthWrite: false, fog: false }),
     );
     faceMesh.renderOrder = 2;
     this.spine.add(faceMesh);
