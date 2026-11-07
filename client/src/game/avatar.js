@@ -4,25 +4,25 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 export const LOOKS = {
   male: {
     label: 'Nam',
-    robe: '#9fb3ba',
-    robeDark: '#8ba0a7',
-    apron: '#e9c35b',
+    robe: '#d9842e',
+    robeDark: '#b4661f',
+    apron: '#d9842e',
     skin: '#e8b98e',
-    sleeve: '#9fb3ba',
+    sleeve: '#d9842e',
     cap: null,
     beads: '#5a4030',
-    shoe: '#efe9dc',
+    shoe: '#e8b98e',
   },
   female: {
     label: 'Nữ',
-    robe: '#a99a8c',
-    robeDark: '#94867a',
-    apron: '#dcc9a6',
+    robe: '#d98f3f',
+    robeDark: '#b9722a',
+    apron: '#d98f3f',
     skin: '#efc39c',
-    sleeve: '#a99a8c',
+    sleeve: '#d98f3f',
     cap: '#6d4b38',
     beads: '#5a4030',
-    shoe: '#efe9dc',
+    shoe: '#efc39c',
   },
 };
 
@@ -220,11 +220,19 @@ export class Avatar {
     smock.translate(0, 0.6, 0);
     bodyGeos.push(colorize(smock, look.robe));
 
-    // tạp dề trước bụng
-    const apron = new THREE.SphereGeometry(0.368, 26, 20, Math.PI / 2 - 0.75, 1.5, Math.PI * 0.44, Math.PI * 0.5);
-    apron.scale(1, 1.2, 0.95);
-    apron.translate(0, 0.6, 0);
-    bodyGeos.push(colorize(apron, look.apron));
+    // dải áo choàng chéo (một bên vai khoác lệch)
+    const drape = new THREE.SphereGeometry(0.371, 30, 8, 0, Math.PI * 2, Math.PI * 0.38, Math.PI * 0.1);
+    drape.scale(1, 1.2, 0.95);
+    drape.rotateZ(0.42);
+    drape.translate(0, 0.6, 0);
+    bodyGeos.push(colorize(drape, look.robeDark));
+
+    // vạt áo chéo thứ hai phía dưới
+    const drape2 = new THREE.SphereGeometry(0.371, 30, 8, 0, Math.PI * 2, Math.PI * 0.52, Math.PI * 0.09);
+    drape2.scale(1, 1.2, 0.95);
+    drape2.rotateZ(0.62);
+    drape2.translate(0, 0.6, 0);
+    bodyGeos.push(colorize(drape2, look.robeDark));
 
     // giày
     for (const sx of [-1, 1]) {

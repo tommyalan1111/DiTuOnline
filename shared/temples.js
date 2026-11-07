@@ -7,8 +7,8 @@ export const TEMPLE_CAPACITY = 50;
 export const TEMPLES = [
   {
     id: 1,
-    slug: 'van-son',
-    name: 'Chùa Vân Sơn',
+    slug: 'huynh-lai',
+    name: 'Chùa Huỳnh Lai',
     tagline: 'Sương sớm trên núi',
     description: 'Mây phủ lưng chừng núi, chuông chùa vọng giữa tầng không.',
     theme: 'mist',
